@@ -5,6 +5,7 @@ import commentsReducer from './commentsReducer';
 import likeReducer from "./likeReducer";
 //this reducer is madefor syncing our firestore data with the statein the background.
 import { firestoreReducer } from 'redux-firestore'
+import { firebaseReducer } from 'react-redux-firebase'
 
 
 
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
     post: postReducer,
     comment: commentsReducer,
     like: likeReducer,
-    firestore: firestoreReducer
+    firestore: firestoreReducer,
+    firebase: firebaseReducer
 })
 
 export default rootReducer;

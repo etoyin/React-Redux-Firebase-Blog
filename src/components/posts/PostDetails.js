@@ -10,6 +10,17 @@ class PostDetails extends Component {
         content: '',
         like: false
     }
+    /*componentDidMount(){
+        setTimeout(() => {
+            console.log(this.props.post);            
+            //the setTimeOut delays this.props.likePost function so that the state will be set before it.
+            //we need to pass i the id so as to pass it in the likeAction
+            this.setState({
+                like: this.props.post.likes.includes('myId')
+            })
+        }, 1000);
+        
+    }*/
     addLike = () => {
         this.setState({
             like: !this.state.like
@@ -29,14 +40,14 @@ class PostDetails extends Component {
     }
     handleSubmit = (e) => {
         e.preventDefault();
-        console.log(this.state.content);
+        //console.log(this.state.content);
         const id = this.props.match.params.id;
         //we need to pass i the id so as to pass it in the commentsAction
         this.props.createComments(this.state.content, id);
     }
     render () {
         const { post } = this.props;
-        console.log(post);
+        //console.log(post);
         if(post){
             return (
                 <div className="container section post-details">
@@ -51,7 +62,7 @@ class PostDetails extends Component {
                             
                         </div>
                         <div className="card-action grey lighten-4">
-                        <i onClick={this.addLike} class="material-icons">{(this.state.like ? 'favorite' : 'favorite_border')}</i><span className="noOfLikes">{post.likes.length}</span>
+                        <i onClick={this.addLike} class="material-icons">{(this.state.like || post.likes.includes('myId') ? 'favorite' : 'favorite_border')}</i><span className="noOfLikes">{post.likes.length}</span>
                             {
                                 post && post.comments.map((comment, index) => {
                                     return (
@@ -86,6 +97,7 @@ const mapStateToProps = (state, thisProps) => {
     const id = thisProps.match.params.id;  
     const posts = state.firestore.data.posts;
     const post = posts ? posts[id] : null;
+    //console.log(post);
     return {
         post: post
     }

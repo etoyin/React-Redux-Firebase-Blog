@@ -17,7 +17,7 @@ class CreatePost extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         //console.log(this.state)
-        this.props.createPosts(this.state);
+        this.props.createPosts(this.state, this.props.currentUserProfile);
     }
     render() {
         const { auth } = this.props;
@@ -46,14 +46,15 @@ class CreatePost extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        createPosts: (post) => {
-            dispatch(createPosts(post))
+        createPosts: (post, currentUserProfile) => {
+            dispatch(createPosts(post, currentUserProfile))
         }
     }
 }
 const mapStateToProps = (state) => {
     return {
-        auth: state.firebase.auth
+        auth: state.firebase.auth,
+        currentUserProfile: state.firebase.profile
     }
 }
 

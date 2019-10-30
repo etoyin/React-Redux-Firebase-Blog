@@ -21,6 +21,7 @@ const store = createStore(rootReducer,
         //pass our config file to connect to the config
         reduxFirestore(fbConfig),
         //attachauthisready will allow us to access a method called firebaseAuthIsReady
+        //useFirestoreForProfile: true, userProfile: 'users', allows us to sync firebase profile to firestore users
         reactReduxFirebase(fbConfig, { useFirestoreForProfile: true, userProfile: 'users', attachAuthIsReady: true })
     )
 );

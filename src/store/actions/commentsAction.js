@@ -1,5 +1,5 @@
 
-export const createComments = (comment, postId) => {
+export const createComments = (comment, postId, currentUserProfile) => {
     // because we've passed our configuration into the store enhancers at index.js,
     //getFirebase and getFirestore know what to connect to.
 
@@ -10,7 +10,7 @@ export const createComments = (comment, postId) => {
         firestore.collection('posts').doc(postId).update({
             comments: firebase.firestore.FieldValue.arrayUnion({
                 content: comment,
-                author: 'Jasmine',
+                author: currentUserProfile.firstName + ' ' + currentUserProfile.lastName,
                 createdAt: new Date()})
 
             // then fuction is fired only after the returned function is through 

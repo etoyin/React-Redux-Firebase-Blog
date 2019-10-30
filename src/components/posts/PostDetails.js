@@ -26,12 +26,14 @@ class PostDetails extends Component {
         this.setState({
             like: !this.state.like
         });
-        const id = this.props.match.params.id
+        const postId = this.props.match.params.id
         //passing in only the like property of state
         setTimeout(() => {
             //the setTimeOut delays this.props.likePost function so that the state will be set before it.
             //we need to pass i the id so as to pass it in the likeAction
-            this.props.likePost(this.state.like, id)
+            // this.props.auth.uid is the current user Id which needs to be added to the like array in the likeAction
+            console.log(this.props.auth.uid);
+            this.props.likePost(this.state.like, postId, this.props.auth.uid)
         }, 1);
     }
     handleChange = (e) => {
@@ -43,12 +45,13 @@ class PostDetails extends Component {
         e.preventDefault();
         //console.log(this.state.content);
         const id = this.props.match.params.id;
-        //we need to pass i the id so as to pass it in the commentsAction
-        this.props.createComments(this.state.content, id);
+        //we need to pass i the id so as to know which post to store the comments in the commentsAction
+        //we can get the name of the person commenting from the profile object
+        this.props.createComments(this.state.content, id, this.props.currentUserProfile);
     }
     render () {
         const { post, auth } = this.props;
-        //console.log(post);
+        //console.log(auth.uid);
         if (!auth.uid) return <Redirect to='/signin' />
         if(post){
             return (
@@ -64,7 +67,7 @@ class PostDetails extends Component {
                             
                         </div>
                         <div className="card-action grey lighten-4">
-                        <i onClick={this.addLike} class="material-icons">{(this.state.like || post.likes.includes('myId') ? 'favorite' : 'favorite_border')}</i><span className="noOfLikes">{post.likes.length}</span>
+                        <i onClick={this.addLike} class="material-icons">{(this.state.like || post.likes.includes(auth.uid) ? 'favorite' : 'favorite_border')}</i><span className="noOfLikes">{post.likes.length}</span>
                             {
                                 post && post.comments.map((comment, index) => {
                                     return (
@@ -102,16 +105,17 @@ const mapStateToProps = (state, thisProps) => {
     //console.log(post);
     return {
         post: post,
-        auth: state.firebase.auth
+        auth: state.firebase.auth,
+        currentUserProfile: state.firebase.profile,
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        createComments: (comment, id) => {
-            dispatch(createComments(comment, id));
+        createComments: (comment, id, currentUserProfile) => {
+            dispatch(createComments(comment, id, currentUserProfile));
         },
-        likePost: (like, id) => {
-            dispatch(likePost(like, id));
+        likePost: (like, id, currentUserId) => {
+            dispatch(likePost(like, id, currentUserId));
         }
     }
 }

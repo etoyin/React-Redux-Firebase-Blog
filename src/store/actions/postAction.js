@@ -1,4 +1,4 @@
-export const createPosts = (post) => {
+export const createPosts = (post, currentUserProfile) => {
     // because we've passed our configuration into the store enhancers at index.js,
     //getFirebase and getFirestore know what to connect to.
 
@@ -9,7 +9,7 @@ export const createPosts = (post) => {
             ...post,
             comments:[],
             likes: [],
-            author: 'Nik',
+            author: currentUserProfile.firstName + ' ' + currentUserProfile.lastName,
             createdAt: new Date()
             // then fuction is fired only after the returned function is through 
             //with talk in to the database.

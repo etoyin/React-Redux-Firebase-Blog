@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { createPosts } from '../../store/actions/postAction'
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 
 class CreatePost extends Component {
@@ -19,6 +20,9 @@ class CreatePost extends Component {
         this.props.createPosts(this.state);
     }
     render() {
+        const { auth } = this.props;
+        if (!auth.uid) return <Redirect to='/signin' />
+
         return (
             <div className="container">
                 <form onSubmit={this.handleSubmit} className="white">
@@ -47,6 +51,11 @@ const mapDispatchToProps = (dispatch) => {
         }
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        auth: state.firebase.auth
+    }
+}
 
 //mapStateToProps is the first parameter of connect but we are not getting any state here
-export default connect(null, mapDispatchToProps)(CreatePost);
+export default connect(mapStateToProps, mapDispatchToProps)(CreatePost);

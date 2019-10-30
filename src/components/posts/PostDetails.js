@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { createComments} from '../../store/actions/commentsAction'
+import { createComments} from '../../store/actions/commentsAction';
 import { connect } from 'react-redux';
 import { likePost } from '../../store/actions/likeAction'
 import { compose } from 'redux';
-import { firestoreConnect } from 'react-redux-firebase'
+import { firestoreConnect } from 'react-redux-firebase';
+import { Redirect } from 'react-router-dom';
 
 class PostDetails extends Component {
     state = {
@@ -46,8 +47,9 @@ class PostDetails extends Component {
         this.props.createComments(this.state.content, id);
     }
     render () {
-        const { post } = this.props;
+        const { post, auth } = this.props;
         //console.log(post);
+        if (!auth.uid) return <Redirect to='/signin' />
         if(post){
             return (
                 <div className="container section post-details">
@@ -99,7 +101,8 @@ const mapStateToProps = (state, thisProps) => {
     const post = posts ? posts[id] : null;
     //console.log(post);
     return {
-        post: post
+        post: post,
+        auth: state.firebase.auth
     }
 }
 const mapDispatchToProps = (dispatch) => {

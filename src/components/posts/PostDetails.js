@@ -56,14 +56,14 @@ class PostDetails extends Component {
         if(post){
             return (
                 <div className="container section post-details">
-                    <div className="card z-depth-0">
+                    <div className="card z-depth-0 content">
                         <div className="card-content">
-                            <span className="card-title">{post.title}</span>
-                            <p>{post.content}</p>
+                            <span className="card-title"><bold>{post.title}</bold></span>
+                            <p className='flow-text'>{post.content}</p>
                         </div>
                         <div className="card-action grey lighten-4 grey-text">
                             <div>Posted By {post.author}</div>
-                            <div>16th August, 12:12pm</div>
+                            <div>{post.createdAt.toDate().toString()}</div>
                             
                         </div>
                         <div className="card-action grey lighten-4">
@@ -73,7 +73,7 @@ class PostDetails extends Component {
                                     return (
                                         <div key={index}>
                                             <p>{comment.content}</p>
-                                            <p>{comment.author}</p>
+                                            <p className='grey-text text-darken-5'><em> - {comment.author}</em></p>
                                         </div>
                                     )
                                 })

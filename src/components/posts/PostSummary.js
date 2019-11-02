@@ -6,7 +6,7 @@ const PostSummary = ({post}) => {
             <div className="card-content grey-text text-darken-3">
                 <span className="card-title">{post.title}</span>
                 <p>Posted By {post.author}</p>
-                <p className="grey-text">15th August, 11:15pm</p>
+                <p className="grey-text">{post.createdAt.toDate().toString()}</p>
             </div>
         </div>
     )

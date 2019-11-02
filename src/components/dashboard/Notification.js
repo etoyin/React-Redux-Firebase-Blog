@@ -2,9 +2,12 @@ import React from 'react';
 
 const Notification = () => {
     return(
-        <div class="z-depth-0 section">
-            <p>Notifications</p>
-            <p>Hello</p>
+        <div className='section'>
+            <div className='card z-depth-0'>
+                <div className='card-content'>
+                    <span className='card-title'></span>
+                </div>
+            </div>
         </div>
     )
 }

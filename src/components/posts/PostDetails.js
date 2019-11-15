@@ -9,7 +9,8 @@ import { Redirect } from 'react-router-dom';
 class PostDetails extends Component {
     state = {
         content: '',
-        like: false
+        like: false,
+        contentValid: false
     }
     /*componentDidMount(){
         setTimeout(() => {
@@ -37,12 +38,26 @@ class PostDetails extends Component {
         }, 1);
     }
     handleChange = (e) => {
+        const value = e.target.value;
+        const name = e.target.name;
         this.setState({
-            content: e.target.value
+            [name]: value
+        }, () => {
+            this.validateContent(name, value)
         })
+    }
+    validateContent = (fieldName, value) => {
+        let contentValid = this.state.contentValid;
+        if (fieldName === 'content'){
+            contentValid = value.length > 2;
+        }
+        this.setState({contentValid: contentValid})
     }
     handleSubmit = (e) => {
         e.preventDefault();
+        this.setState({
+            content: ''
+        })
         //console.log(this.state.content);
         const id = this.props.match.params.id;
         //we need to pass i the id so as to know which post to store the comments in the commentsAction
@@ -80,8 +95,8 @@ class PostDetails extends Component {
                             }
                             <form onSubmit={this.handleSubmit}>
                                 <label>Comments</label>
-                                <textarea id="comments" cols="30" rows="10" className="materialize-textarea" onChange={this.handleChange}></textarea>
-                                <button className="btn">Add Comments</button>
+                                <textarea id="comments" name='content' cols="30" rows="10" className="materialize-textarea" onChange={this.handleChange}></textarea>
+                                <button disabled={!this.state.contentValid} className="btn">Add Comments</button>
                             </form>
                         </div>
                     </div>

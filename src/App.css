@@ -43,3 +43,7 @@ code {
 i:hover{
   cursor: pointer;
 }
+.fa-bell{
+  font-size: 25px;
+  padding: 5px;
+}

@@ -7,11 +7,48 @@ import { Redirect } from 'react-router-dom';
 class CreatePost extends Component {
     state = {
         title: '',
-        content: ''
+        content: '',
+        postErrors: { title: '', content: ''},
+        titleValid: false,
+        contentValid: false,
+        postFormValid: false
+
     }
     handleChange = (e) => {
+        const id = e.target.id;
+        const value = e.target.value
         this.setState({
-            [e.target.id] : e.target.value
+            [id] : value
+        }, () => {
+            this.validateInput(id, value);
+        })
+    }
+    validateInput = (fieldName, value) => {
+        let titleValid = this.state.titleValid;
+        let contentValid = this.state.contentValid;
+        let postErrors = this.state.postErrors;
+
+        switch(fieldName){
+            case 'title':
+                titleValid = value.length > 2;
+                postErrors.title = titleValid ? '' : 'The Post title must be more than 2 characters';
+                break;
+            case 'content':
+                contentValid = value.length >= 20;
+                postErrors.content = contentValid ? '' : 'The Post content must be more or equal to 20 characters';
+                break;
+            default:
+                break;
+        }
+        this.setState({
+            titleValid: titleValid,
+            contentValid: contentValid,
+            postErrors: postErrors
+        }, this.validatePost)
+    }
+    validatePost = () => {
+        this.setState({
+            postFormValid: this.state.titleValid && this.state.contentValid
         })
     }
     handleSubmit = (e) => {
@@ -37,12 +74,29 @@ class CreatePost extends Component {
                         <textarea id="content" cols="30" rows="10" className="materialize-textarea" onChange={this.handleChange}></textarea>
                     </div>
                     <div className="input-field">
-                        <button className="btn pink lighten-1 z-depth-0">Create</button>
+                        <button className="btn pink lighten-1 z-depth-0" disabled={!this.state.postFormValid}>Create</button>
+                    </div>
+                    <div className='center red-text'>
+                        <PostFormErrors postErrors={this.state.postErrors} />
                     </div>
                 </form>
             </div>
         )
     }
+}
+
+const PostFormErrors = ({postErrors}) => {
+    return (
+        <div>
+            {
+                Object.keys(postErrors).map((fieldName, i) => {
+                    if(postErrors[fieldName].length > 0){
+                        return <p key={i}>{postErrors[fieldName]}</p>
+                    }
+                })
+            }
+        </div>
+    )
 }
 
 const mapDispatchToProps = (dispatch) => {

@@ -31,7 +31,7 @@ const createNotification = (notification) => {
     })
 
 exports.userJoined = functions.auth.user()
-    onCreate((user) => {
+    .onCreate((user) => {
         return admin.firestore().collection('users')
             .doc(user.uid).get()
             .then((doc) => {

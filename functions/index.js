@@ -17,7 +17,7 @@ const createNotification = (notification) => {
   response.send("Hello from Firebase!");
  });
 
- exports.projectCreated = functions.firestore
+ exports.postCreated = functions.firestore
     .document('posts/{post}')
     .onCreate((doc) => {
         const post = doc.data();
@@ -28,4 +28,21 @@ const createNotification = (notification) => {
         }
 
         return createNotification(notification)
+    })
+
+exports.userJoined = functions.auth.user()
+    onCreate((user) => {
+        return admin.firestore().collection('users')
+            .doc(user.uid).get()
+            .then((doc) => {
+                const newUser = doc.data();
+                const notification = {
+                    content: 'signed up',
+                    user: `${newUser.fistName} ${newUser.lastName}`,
+                    time: admin.firestore.FieldValue.serverTimestamp()
+                }
+                return createNotification(notification)
+
+                
+            })
     })
